@@ -1,0 +1,117 @@
+<div id="order__wrapper">
+  <h1 class="order-header">Создать новый заказ</h1>
+  <div id="order-new">
+    <form class="order-new__form" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="number"
+           [ngClass]="{invalid: form.get('number').touched && form.get('number').invalid}"
+      >
+        <label for="order__number">Номер накладной:</label>
+        <input id="order__number" type="text" formControlName="number" placeholder="Введите номер..." pattern="^[^\s]+(\s.*)?$">
+      </div>
+      <div class="arrive-time"
+           [ngClass]="{invalid: form.get('arrive').touched && form.get('arrive').invalid}"
+      >
+        <label for="order__arrive">Время прибытия:</label>
+        <input id="order__arrive" type="date" formControlName="arrive" placeholder="dd.mm.yyyy">
+      </div>
+      <div class="type"
+           [ngClass]="{invalid: form.get('type').touched && form.get('type').invalid}"
+      >
+        <label for="order__type">Тип заказа:</label>
+        <select id="order__type" formControlName="type">
+          <option value="RUED">RUED</option>
+          <option value="RUEX">RUEX</option>
+          <option value="RUSG">RUSG</option>
+        </select>
+      </div>
+      <button class="button" type="submit"
+              [disabled]="form.invalid"
+      >
+        Создать
+      </button>
+    </form>
+  </div>
+  <h1>Информация по заказам</h1>
+  <div id="filter">
+    <p>Фильтровать (1 способ)</p>
+    <div class="filter-id">
+      <label for="filter__id">по id:</label>
+      <input id="filter__id" type="text" placeholder="Введите id..." [(ngModel)]="filterIdStr">
+    </div>
+    <div class="filter-number">
+      <label for="filter__num">по номеру накладной:</label>
+      <input id="filter__num" type="text" placeholder="Введите номер..." [(ngModel)]="filterNumStr">
+    </div>
+    <div class="filter-arrive">
+      <label for="filter__arr">по времени прибытия:</label>
+      <input id="filter__arr" type="date" placeholder="Введите время..." [(ngModel)]="filterArrStr">
+    </div>
+    <div class="filter-type">
+      <label for="filter__type">по типу заказа:</label>
+      <input id="filter__type" type="text" placeholder="Введите тип..." [(ngModel)]="filterTypeStr">
+    </div>
+  </div>
+  <div id="filter2">
+    <form [formGroup] = formFilter (ngSubmit)="filter()">
+      <p>Фильтровать (2 способ)</p>
+      <div class="filter2-id">
+        <label for="filter2__id">по id:</label>
+        <input id="filter2__id" type="text" placeholder="Введите id..." formControlName="form_id">
+      </div>
+      <div class="filter2-number">
+        <label for="filter2__num">по номеру накладной:</label>
+        <input id="filter2__num" type="text" placeholder="Введите номер..." formControlName="form_number">
+      </div>
+      <div class="filter2-arrive">
+        <label for="filter2__arr">по времени прибытия:</label>
+        <input id="filter2__arr" type="date" placeholder="Введите время..." formControlName="form_arrive">
+      </div>
+      <div class="filter2-type">
+        <label for="filter2__type">по типу заказа:</label>
+        <input id="filter2__type" type="text" placeholder="Введите тип..." formControlName="form_type">
+      </div>
+      <button class="button"
+              type="submit"
+      >Фильтровать</button>
+    </form>
+  </div>
+  <div id="sort">
+    <p>Сортировать:</p>
+    <div class="sort-id">
+      <span>по id</span>
+      <i class="fa fa-chevron-down" aria-hidden="true" (click)="isDownId = !isDownId; sortById()" *ngIf="isDownId"></i>
+      <i class="fa fa-chevron-up" aria-hidden="true" (click)="isDownId = !isDownId; sortById()" *ngIf="!isDownId"></i>
+    </div>
+    <div class="sort-create">
+      <span>по дате создания</span>
+      <i class="fa fa-chevron-down" aria-hidden="true" (click)="isDownDate = !isDownDate; sortByDate()" *ngIf="isDownDate"></i>
+      <i class="fa fa-chevron-up" aria-hidden="true" (click)="isDownDate = !isDownDate; sortByDate()" *ngIf="!isDownDate"></i>
+    </div>
+    <div class="sort-type">
+      <span>по типу заказа</span>
+      <i class="fa fa-chevron-down" aria-hidden="true" (click)="isDownType = !isDownType; sortByType()" *ngIf="isDownType"></i>
+      <i class="fa fa-chevron-up" aria-hidden="true" (click)="isDownType = !isDownType; sortByType()" *ngIf="!isDownType"></i>
+    </div>
+  </div>
+  <div class="delete">
+    <button class="button" (click)="deleteAllZak()"
+    >
+      Удалить все заказы
+    </button>
+  </div>
+  <h2>Список заказов</h2>
+  <div cdkDropList
+       [cdkDropListData]="result"
+       (cdkDropListDropped)="onDrop($event)"
+  >
+    <div id="widget"
+         *ngFor="let par of result | filterPipeId: filterIdStr | filterPipeNumber: filterNumStr | filterPipeArr: filterArrStr | filterPipeType: filterTypeStr" cdkDrag
+    >
+      <div class="id">id: {{ par.id }}</div>
+      <div class="create_date">Дата создания: {{ par.date | date: 'dd.MM.yyyy HH:mm:ss' }}</div>
+      <div class="number_n">Номер накладной: {{ par.number }}</div>
+      <div class="arrive_time">Время прибытия: {{ par.arrive | date: 'dd.MM.yyyy' }}</div>
+      <div class="type">Тип заказа: {{ par.type }}</div>
+    </div>
+  </div>
+</div>
