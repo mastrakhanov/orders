@@ -31,7 +31,7 @@ export class DesktopComponent implements OnInit {
   filterTypeStr = '';
   filtered = false;
 
-  ngOnInit() {
+  ngOnInit():void {
     this.form = new FormGroup({
       number: new FormControl('', Validators.required),
       arrive: new FormControl('', Validators.required),
@@ -50,7 +50,7 @@ export class DesktopComponent implements OnInit {
     }
   }
 
-  submit() {
+  submit():void {
     this.result = JSON.parse(localStorage.getItem('zak'));
     if (this.result === null) {
       this.id = 0;
@@ -86,11 +86,11 @@ export class DesktopComponent implements OnInit {
     }
   }
 
-  sortByDate() {
+  sortByDate():void {
     if (this.isDownDate) {
-      this.result = this.result.sort((a, b) => b.date - a.date);
+      this.result.sort((a, b) => b.date - a.date);
     } else {
-      this.result = this.result.sort((a, b) => a.date - b.date);
+      this.result.sort((a, b) => a.date - b.date);
     }
     if (!this.filtered) {
       localStorage.setItem('zak', JSON.stringify(this.result));
@@ -98,11 +98,11 @@ export class DesktopComponent implements OnInit {
     }
   }
 
-  sortByType() {
+  sortByType():void {
     if (this.isDownType) {
-      this.result = this.result.slice().sort((a, b) => a.type > b.type ? 1 : -1);
+      this.result.sort((a, b) => a.type > b.type ? 1 : -1);
     } else {
-      this.result = this.result.slice().sort((a, b) => a.type > b.type ? -1 : 1);
+      this.result.sort((a, b) => a.type > b.type ? -1 : 1);
     }
     if (!this.filtered) {
       localStorage.setItem('zak', JSON.stringify(this.result));
@@ -110,11 +110,11 @@ export class DesktopComponent implements OnInit {
     }
   }
 
-  sortById() {
+  sortById():void {
     if (this.isDownId) {
-      this.result = this.result.sort((a, b) => +b.id - +a.id);
+      this.result.sort((a, b) => +b.id - +a.id);
     } else {
-      this.result = this.result.sort((a, b) => +a.id - +b.id);
+      this.result.sort((a, b) => +a.id - +b.id);
     }
     if (!this.filtered) {
       localStorage.setItem('zak', JSON.stringify(this.result));
@@ -122,12 +122,12 @@ export class DesktopComponent implements OnInit {
     }
   }
 
-  deleteAllZak () {
+  deleteAllZak(): void {
     localStorage.clear();
     this.result = this.result = JSON.parse(localStorage.getItem('zak'));
   }
 
-  filter() {
+  filter():void {
     this.result = JSON.parse(localStorage.getItem('zak'));
     if (this.formFilter.value.form_id) {
       this.result = this.result.filter((item) => {return item.id.toLowerCase().includes(this.formFilter.value.form_id.toLowerCase())});
