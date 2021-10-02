@@ -1,0 +1,115 @@
+@import "styles/mixins";
+@import "styles/params";
+
+
+.order-wrapper {
+  padding: 10px;
+
+  & .order-header {
+    margin-top: 20px;
+  }
+
+  & .order-new {
+    border: 1px solid #000;
+    max-width: $width;
+    padding: 20px;
+    margin: 20px 0 20px 0;
+
+    & .order-new__form {
+
+      & .arrive-date {
+        max-width: 201px;
+      }
+
+      & .button {
+        @include button;
+
+        &:disabled {
+          cursor: not-allowed;
+          background: #fff;
+          color: #111;
+          border: 1px solid #000;
+        }
+      }
+    }
+  }
+
+  .filter-block {
+    display: flex;
+    justify-content: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .filter {
+    border: 1px solid #000;
+    max-width: $width;
+    padding: 20px;
+
+    & p {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    & .arrive-date {
+      max-width: 201px;
+    }
+  }
+
+  .sort {
+    margin: 20px 0;
+    max-width: 480px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+
+    & ::ng-deep.mat-form-field-wrapper {
+      padding: 0;
+    }
+
+    & .sort-icon {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
+
+  & .delete {
+    margin: 20px 0 30px 0;
+
+    & .button {
+      @include button;
+    }
+  }
+
+  .widget {
+    max-width: 320px;
+    border: 1px solid #000;
+    padding: 20px;
+    margin: 20px 0;
+    cursor: grab;
+
+    & .id {
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    & .create_date {
+      margin-bottom: 10px;
+    }
+
+    & .number_n {
+      word-wrap: break-word;
+      margin-bottom: 10px;
+    }
+
+    & .arrive_time {
+      margin-bottom: 10px;
+    }
+
+    & .type {
+      margin-bottom: 10px;
+    }
+  }
+}

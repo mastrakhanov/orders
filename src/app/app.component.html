@@ -1,1 +1,175 @@
-<app-desktop></app-desktop>
+<div class="order-wrapper">
+  <h1 class="order-header">Создать новый заказ</h1>
+
+  <div class="order-new">
+    <form class="order-new__form" [formGroup]="createForm" (ngSubmit)="submit()">
+      <mat-form-field>
+        <mat-label>Номер накладной:</mat-label>
+        <input
+          matInput
+          formControlName="number"
+          placeholder="Введите номер..."
+          pattern="^[^\s]+(\s.*)?$"
+        >
+      </mat-form-field>
+
+      <mat-form-field class="arrive-date">
+        <mat-label>Дата прибытия:</mat-label>
+        <input matInput
+               [matDatepicker]="createDatePicker"
+               formControlName="arrive"
+               placeholder="Введите дату..."
+        >
+        <mat-datepicker-toggle matSuffix [for]="createDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #createDatePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Тип заказа:</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="RUED">RUED</mat-option>
+          <mat-option value="RUEX">RUEX</mat-option>
+          <mat-option value="RUSG">RUSG</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-button class="button" type="submit"
+              [disabled]="createForm.invalid"
+      >
+        Создать
+      </button>
+    </form>
+  </div>
+
+  <h1>Информация по заказам</h1>
+
+  <div class="filter-block">
+    <div class="filter">
+      <p>Фильтровать (1 способ)</p>
+      <form>
+        <mat-form-field>
+          <mat-label>по id...</mat-label>
+          <input matInput
+                 placeholder="Введите id..."
+                 [(ngModel)]="filterOrderId"
+                 [ngModelOptions]="{ standalone: true }"
+          >
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>по номеру накладной</mat-label>
+          <input matInput
+                 placeholder="Введите номер..."
+                 [(ngModel)]="filterOrderNumber"
+                 [ngModelOptions]="{ standalone: true }"
+          >
+        </mat-form-field>
+
+        <mat-form-field class="arrive-date">
+          <mat-label>по дате прибытия</mat-label>
+          <input matInput
+                 [matDatepicker]="filterDatePickerFirst"
+                 placeholder="Введите дату..."
+                 [(ngModel)]="filterOrderArrive"
+                 [ngModelOptions]="{ standalone: true }"
+          >
+          <mat-datepicker-toggle matSuffix [for]="filterDatePickerFirst"></mat-datepicker-toggle>
+          <mat-datepicker #filterDatePickerFirst></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>по типу заказа</mat-label>
+          <mat-select [(ngModel)]="filterOrderType" [ngModelOptions]="{ standalone: true }">
+            <mat-option value=""></mat-option>
+            <mat-option value="RUED">RUED</mat-option>
+            <mat-option value="RUEX">RUEX</mat-option>
+            <mat-option value="RUSG">RUSG</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="filter">
+      <p>Фильтровать (2 способ)</p>
+      <form [formGroup]="filterForm">
+        <mat-form-field>
+          <mat-label>по id...</mat-label>
+          <input matInput placeholder="Введите id..." formControlName="formId">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>по номеру накладной</mat-label>
+          <input matInput placeholder="Введите номер..." formControlName="formNumber">
+        </mat-form-field>
+
+        <mat-form-field class="arrive-date">
+          <mat-label>по дате прибытия</mat-label>
+          <input matInput
+                 [matDatepicker]="filterDatePickerSecond"
+                 placeholder="Введите дату..."
+                 formControlName="formArrive"
+          >
+          <mat-datepicker-toggle matSuffix [for]="filterDatePickerSecond"></mat-datepicker-toggle>
+          <mat-datepicker #filterDatePickerSecond></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>по типу заказа</mat-label>
+          <mat-select formControlName="formType">
+            <mat-option value=""></mat-option>
+            <mat-option value="RUED">RUED</mat-option>
+            <mat-option value="RUEX">RUEX</mat-option>
+            <mat-option value="RUSG">RUSG</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+
+  <div class="sort">
+    <mat-form-field>
+      <mat-label>Сортировать по:</mat-label>
+      <mat-select [formControl]="sortForm">
+        <mat-option value=""></mat-option>
+        <mat-option value="id">id</mat-option>
+        <mat-option value="dateTime">дате создания</mat-option>
+        <mat-option value="type">типу заказа</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <i class="sort-icon fa fa-chevron-{{ direction$.value ? 'down' : 'up' }}"
+       (click)="directionChange()"
+    ></i>
+  </div>
+
+  <div class="delete">
+    <button mat-button class="button" (click)="deleteOrders()"
+    >
+      Удалить все заказы
+    </button>
+  </div>
+
+  <h2>Список заказов</h2>
+
+  <div *ngIf="displayOrders$ | async as displayOrders"
+       [cdkDropListData]="displayOrders"
+       (cdkDropListDropped)="onDrop($event, displayOrders)"
+       cdkDropList
+  >
+    <mat-card cdkDrag class="widget"
+              *ngFor="let order of displayOrders
+               | filteringPipe: { field: 'id', value: filterOrderId }
+               | filteringPipe: { field: 'number', value: filterOrderNumber }
+               | filteringPipe: { field: 'arrive', value: filterOrderArrive }
+               | filteringPipe: { field: 'type', value: filterOrderType }"
+    >
+      <mat-card-title class="id">Заказ №{{ order.id }}</mat-card-title>
+      <mat-card-content>
+        <p class="create_date">Дата создания: {{ order.dateTime | date: 'dd.MM.yyyy HH:mm:ss' }}</p>
+        <p class="number_n">Номер накладной: {{ order.number }}</p>
+        <p class="arrive_time">Время прибытия: {{ order.arrive | date: 'dd.MM.yyyy' }}</p>
+        <p class="type">Тип заказа: {{ order.type }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

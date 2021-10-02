@@ -1,0 +1,16 @@
+@import "~@angular/material/theming";
+@import "~@angular/material/core/color/all-color";
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+
+
+$my-primary: mat-palette($mat-gray, 900);
+$my-accent: mat-palette($mat-blue, A200, A100, A400);
+
+$my-theme: mat-light-theme((
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+  )
+));
+
+@include angular-material-color($my-theme);
