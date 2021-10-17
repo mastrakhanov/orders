@@ -32,10 +32,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/font-awesome/css/font-awesome.min.css"
-            ],
-            "scripts": []
+              "src/styles.scss"
+            ]
           },
           "configurations": {
             "production": {
@@ -98,8 +96,7 @@
             ],
             "styles": [
               "src/styles.scss"
-            ],
-            "scripts": []
+            ]
           }
         },
         "lint": {
