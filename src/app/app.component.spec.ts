@@ -91,6 +91,23 @@ describe('AppComponent', () => {
     expect(storageService.get).toHaveBeenCalledTimes(1);
   });
 
+  it('createForm should contain number, arrive, type controls', () => {
+    expect(component.createForm.contains('number')).toBeTrue();
+    expect(component.createForm.contains('arrive')).toBeTrue();
+    expect(component.createForm.contains('type')).toBeTrue();
+  });
+
+  it('filterForm should contain formId, formNumber, formArrive, formType controls', () => {
+    expect(component.filterForm.contains('formId')).toBeTrue();
+    expect(component.filterForm.contains('formNumber')).toBeTrue();
+    expect(component.filterForm.contains('formArrive')).toBeTrue();
+    expect(component.filterForm.contains('formType')).toBeTrue();
+  });
+
+  it('sortForm should be truthy', () => {
+    expect(component.sortForm).toBeTruthy();
+  });
+
   it('should return displayOrders', (done) => {
     component.sortForm.setValue('id');
     component.ngOnInit();
